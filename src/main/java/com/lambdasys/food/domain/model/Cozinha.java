@@ -40,10 +40,6 @@ public class Cozinha implements Serializable {
 	@Column(name="nome")
 	private String nome;
 	
-	@NotBlank
-	@Column(name="descricao")
-	private String descricao;
-
 	@JsonIgnore
 	@OneToMany(mappedBy = "cozinha")
 	private List<Restaurante> restaurantes = new ArrayList<>();

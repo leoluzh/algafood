@@ -34,5 +34,13 @@ public class Estado implements Serializable{
 	@NotBlank
 	@Column(name="nome")
 	private String nome;
+
+	@NotBlank
+	@Column(name="sigla")
+	private String sigla;
+	
+	@NotBlank
+	@Column(name="codigo_ibge")
+	private Integer codigoIbge;
 	
 }

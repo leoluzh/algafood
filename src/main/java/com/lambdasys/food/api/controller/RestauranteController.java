@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lambdasys.food.core.validation.ValidacaoException;
 import com.lambdasys.food.domain.exceptions.EntidadeNaoEncontradaException;
 import com.lambdasys.food.domain.exceptions.NegocioException;
 import com.lambdasys.food.domain.model.Restaurante;
@@ -38,6 +41,9 @@ public class RestauranteController implements Serializable {
 	
 	@Autowired
 	private RestauranteService service;
+	
+	@Autowired
+	private SmartValidator validator;
 	 
 	@GetMapping
 	public ResponseEntity<List<Restaurante>> list(){
@@ -77,9 +83,18 @@ public class RestauranteController implements Serializable {
 		try {
 			Restaurante restauranteAtual = service.findById( id );
 			merge( campos , restauranteAtual );
+			validate(restauranteAtual);
 			return update( id , restauranteAtual );
 		}catch(EntidadeNaoEncontradaException ex) {
 			throw new NegocioException(ex.getMessage(),ex.getCause());
+		}
+	}
+	
+	protected void validate( Restaurante restaurante ) {
+		BeanPropertyBindingResult br = new BeanPropertyBindingResult( restaurante ,"restaurante");
+		validator.validate( restaurante , br );
+		if( br.hasErrors() ) {
+			throw new ValidacaoException(br);
 		}
 	}
 	

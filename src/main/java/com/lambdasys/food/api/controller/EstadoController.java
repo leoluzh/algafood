@@ -24,7 +24,7 @@ import com.lambdasys.food.domain.repository.EstadoRepository;
 import com.lambdasys.food.domain.service.EstadoService;
 
 @RestController
-@RequestMapping("/estados")
+@RequestMapping("/estados/v1")
 @SuppressWarnings("serial")
 public class EstadoController implements Serializable {
 

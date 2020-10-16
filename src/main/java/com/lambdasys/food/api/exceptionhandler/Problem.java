@@ -52,5 +52,14 @@ public class Problem implements Serializable {
 	
 	private List<Field> fields;
 	
+	private List<Object> objects;
+	
+	@Getter
+	@Builder
+	public static class Object {
+		private String name;
+		private String userMessage;
+	}
+	
 	
 }
